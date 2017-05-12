@@ -21,10 +21,43 @@ framerate = wf1.getframerate()
 str_data = wf1.readframes(nframes)
 wf1.close()
 
+#set values
+LEN = 16384 #data per frame
+MAXF = 700 #max frequency
+MINF = 180 #min freq
+MINA = 10 #min amplitude
+FREQ = 44100 #sampling frequency
+#获得等差数列
+FREQ_LIST=linspace(0,FREQ/2,LEN/2)
+#num of frames
+n = int(len(str_data)/LEN)
+
+notes_list = zeros([0,n-1])
+freqs_list = zeros([0,n-1])
+maxA_list = zeros([0,n-1])
+
+MAX_INDEX = int(LEN/FREQ*MAXF)
+MIN_INDEX = int(LEN/FREQ*MINF)
+
+key=['G3 ','G3#','A3 ','A3#','B3 ',\
+'C4 ','C4#','D4 ','D4#','E4 ','F4 ','F4#','G4 ','G4#','A4 ','A4#','B4 ',\
+'C5 ','C5#','D5 ','D5#','E5 ','F5 ','F5#','G5 ','G5#','A5 ','A5#','B5 ',\
+'C6 ','C6#','D6 ','D6#','E6 ','F6 ','F6#','G6 ','G6#','A6 ','A6#','B6 ']
+
+for i in range(0,n-1):
+    X = fft(strdata[(i)*LEN,(i+1)*LEN])
+    X_cut = X[1,MAX_INDEX]
+
+    A = sqrt(X_cut * conj(X_cut))
+    if A > 0:
+        A = 20 * log10(A)
+
+    max_index=MIN_INDEX
+    maxA_list[i]=
 #将波形数据转换为数组
 wave_data = np.fromstring(str_data, dtype=np.short)
 
-#将wave_data数组改为两列 然后转职
+#将wave_data数组改为两列 然后转置
 wave_data.shape = -1, 2
 wave_data = wave_data.T
 
