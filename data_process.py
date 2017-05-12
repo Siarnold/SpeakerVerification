@@ -40,7 +40,7 @@ for wname in os.listdir(pfpath1): # wave name
 		split = splits[x]
 		split = np.fft.fft(split) # FFT to extract raw feature
 		split.tofile(pfpath2 + wname[0:-4] + '_{:0>4d}.dat'.format(x))
-		print(split.shape)
+		# print(split.shape)
 
 # wdata = np.fromfile(pfpath2 + wname[0:-4] + '.dat', dtype = np.short)
 
