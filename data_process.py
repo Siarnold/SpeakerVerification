@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # FFT the audio data to derive its frequent field feature.
+# 	Effective FFT confirmed with uint16.
 # Copyleft(c), Siarnold, 2017
 
 import os
@@ -34,14 +35,19 @@ if not os.path.isdir(pfpath):
 		nframes = audi.getnframes()
 		sdata = audi.readframes(nframes) # string type of data
 		audi.close()
-		wdata = np.fromstring(sdata, dtype = np.short) # short-type data, 2 Bytes
+		wdata = np.fromstring(sdata, dtype = np.uint16)
+		# 0 - 65535 effectively convert
+		# print(wdata.mean()) # mean around 33000
 		nsplits = nframes // nSamFrame # number of valid splits (with 16000 frames), whether the remaider is 0 or else
 		splits = np.split(wdata, [nSamFrame * x for x in range(1, nsplits + 1)])
 		for x in range(nsplits):
 			split = splits[x]
 			split = np.fft.fft(split) # FFT to extract raw feature
-			# if not //50, max = 2000000 min = 500
-			split = (np.absolute(split) // 50).astype(np.uint16)
+			# split = np.absolute(split)
+			# print(split.max(),split.min(), split.mean())
+			# if not //, max = 5e8 min = 1e-4
+			split = (np.absolute(split) // 10000).astype(np.uint16)
+			# print(split.max(),split.min())
 			split.tofile(pfpath2 + wname[0:-4] + '_{:0>4d}.dat'.format(x))
 			# split = np.fromfile(pfpath2 + wname[0:-4] + '_{:0>4d}.dat'.format(x), dtype = np.uint16)
 
