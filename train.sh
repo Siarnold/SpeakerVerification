@@ -1,4 +1,6 @@
 #!/bin/sh
+# train the spv_cnn end-to-end
+# Copyleft(c), Siarnold, 2017
 ./data_process.py
-# ./make_list.py
-# ./spv_cnn_train.py
+./list_produce.py
+./spv_cnn_train.py
