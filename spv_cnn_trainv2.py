@@ -6,24 +6,29 @@ import os
 import tensorflow as tf
 import keras.backend.tensorflow_backend as KTF
 from keras.optimizers import SGD
-from keras.callbacks import ModelCheckpoint
+from keras.callbacks import ModelCheckpoint, CSVLogger
 import numpy as np
 from spv_cnn import spv_cnn, spv_cnn_v1
 
 # set parameters
 batchSize = 16
 nClasses = 2
-nEpochs = 200
-nTrain = 342 # number of train samples
-nVal = 342 # number of val samples
+nEpochs = 300
 
 # the paths
 cwd = os.getcwd() # current working directory
 tpath = cwd + '/data/prcsd.ignore/train_list.txt' # train text path
-vpath = tpath # temporarily set the same
+vpath = cwd + '/data/prcsd.ignore/val_list.txt' # validation text path
 dpath = cwd + '/data/prcsd.ignore/dats/' # data path
-mpath = cwd + '/model.ignore/' # model path
+mpath = cwd + '/modelv0-tv.ignore/' # model path
 
+# count the number of samples
+f = open(tpath)
+nTrain = len(f.readlines()) # number of train samples
+f.close()
+f = open(vpath)
+nVal =  len(f.readlines())# number of val samples
+f.close()
 
 def get_session(gpu_fraction=0.9):
     num_threads = os.environ.get('OMP_NUM_THREADS')
@@ -69,9 +74,9 @@ def generate_fit(path, batchSize, nClasses):
 
 if __name__ == '__main__':
 	KTF.set_session(get_session())
-	model = spv_cnn_v1(nDim = 16000, nClass = nClasses)
+	model = spv_cnn(nDim = 16000, nClass = nClasses)
 	model.summary()
-	sgd = SGD(lr=1e-6, decay=5e-9, momentum=0.9, nesterov=True)
+	sgd = SGD(lr=1e-6, decay=3e-9, momentum=0.9, nesterov=True)
 	# model.compile(loss='categorical_crossentropy', optimizer='RMSprop', metrics=['accuracy'])
 	model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
 	
@@ -79,10 +84,13 @@ if __name__ == '__main__':
 		os.mkdir(mpath)
 
 	# checkpoint
-	cp = ModelCheckpoint(mpath + 'spv_v0.{epoch:02d}-{val_loss:.2f}.hdf5')
+	mname = mpath + 'spv_v0.{epoch:03d}-{val_loss:.2f}.hdf5'
+	cp = ModelCheckpoint(mname, save_weights_only=True, period=25)
+	# csv logger
+	cl = CSVLogger(mpath + 'spv_v0_training.log')
 	model.fit_generator(generate_fit(tpath, batchSize, nClasses), 
-		validation_data=generate_fit(tpath, batchSize, nClasses), 
+		validation_data=generate_fit(vpath, batchSize, nClasses), 
 		steps_per_epoch=np.ceil(nTrain/batchSize), 		
 		epochs=nEpochs, validation_steps=nVal, 
-		verbose=1)
+		verbose=1, callbacks=[cp, cl])
 
