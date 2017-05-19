@@ -9,7 +9,7 @@ import numpy as np
 
 fpath = './data/raw/' # file path
 # use .ignore to avoid uploading
-pfpath = './data/prcsd.ignore/' # processed file path
+pfpath = './data/prcsdv2.ignore/' # processed file path
 samRate = 4000 # sample rate
 samTime = 4 # sample time
 

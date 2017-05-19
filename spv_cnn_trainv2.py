@@ -8,7 +8,7 @@ import keras.backend.tensorflow_backend as KTF
 from keras.optimizers import SGD
 from keras.callbacks import ModelCheckpoint, CSVLogger
 import numpy as np
-from spv_cnn import spv_cnn, spv_cnn_v1
+from spv_cnn import spv_cnn, spv_cnn_v1, spv_cnn_vf
 
 # set parameters
 batchSize = 16
@@ -17,10 +17,13 @@ nEpochs = 300
 
 # the paths
 cwd = os.getcwd() # current working directory
-tpath = cwd + '/data/prcsd.ignore/train_list.txt' # train text path
-vpath = cwd + '/data/prcsd.ignore/val_list.txt' # validation text path
-dpath = cwd + '/data/prcsd.ignore/dats/' # data path
-mpath = cwd + '/modelv0-tv.ignore/' # model path
+mpath = cwd + '/modelv0-tvt.ignore/' # model path
+mname = mpath + 'spv_v0.{epoch:03d}-{val_loss:.2f}.hdf5'
+lname = mpath + 'spv_v0_training.log'
+
+tpath = cwd + '/data/prcsdv2.ignore/train_list.txt' # train text path
+vpath = cwd + '/data/prcsdv2.ignore/val_list.txt' # validation text path
+dpath = cwd + '/data/prcsdv2.ignore/dats/' # data path
 
 # count the number of samples
 f = open(tpath)
@@ -84,10 +87,9 @@ if __name__ == '__main__':
 		os.mkdir(mpath)
 
 	# checkpoint
-	mname = mpath + 'spv_v0.{epoch:03d}-{val_loss:.2f}.hdf5'
 	cp = ModelCheckpoint(mname, save_weights_only=True, period=25)
 	# csv logger
-	cl = CSVLogger(mpath + 'spv_v0_training.log')
+	cl = CSVLogger(lname)
 	model.fit_generator(generate_fit(tpath, batchSize, nClasses), 
 		validation_data=generate_fit(vpath, batchSize, nClasses), 
 		steps_per_epoch=np.ceil(nTrain/batchSize), 		
