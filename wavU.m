@@ -1,47 +1,47 @@
-% ½«wavÎÄ¼ş×ª»¯ÎªÒô·û
-% ÍõĞñ¿µ£¬2016.5.27
-% ÊÊÓÃMatlab2014ÒÔÉÏ
+% å°†wavæ–‡ä»¶è½¬åŒ–ä¸ºéŸ³ç¬¦
+% ç‹æ—­åº·ï¼Œ2016.5.27
+% é€‚ç”¨Matlab2014ä»¥ä¸Š
 
-% ×¢Òâ£¬²âÊÔËùÓĞµÄ¸èÇú¶¼ÒÑ¾­µ÷Õûµ½ÁËÃ¿·ÖÖÓ80.7ÅÄ£¬ÒÔÊÊÓ¦FFTµÄĞèÒª
-% ½«ÀÖÇú·ÖÖ¡£¬·Ö±ğ½øĞĞ¸µÀïÒ¶±ä»»
-    % ÒÔÈ¡ÑùÆµÂÊ f0=44100Hz ¼ÆËã
-    % Ò»Ö¡°üº¬16384¸öÊı¾İÊ±£¬¼´³ÖĞø0.372s£»ÆµÂÊ¾«¶ÈÎª2.69Hz
-    % ´ËÎÄ¼ş½øĞĞµÄÊÇµ¥Òô·ûÊ¶±ğ£¬È¡µÃ·¶Î§ÄÚ×îÇ¿ÆµÂÊ£¬ÔÙÏòÏÂ²éÕÒ2~4±¶ÕÒµ½»ùÆµ
+% æ³¨æ„ï¼Œæµ‹è¯•æ‰€æœ‰çš„æ­Œæ›²éƒ½å·²ç»è°ƒæ•´åˆ°äº†æ¯åˆ†é’Ÿ80.7æ‹ï¼Œä»¥é€‚åº”FFTçš„éœ€è¦
+% å°†ä¹æ›²åˆ†å¸§ï¼Œåˆ†åˆ«è¿›è¡Œå‚…é‡Œå¶å˜æ¢
+    % ä»¥å–æ ·é¢‘ç‡ f0=44100Hz è®¡ç®—
+    % ä¸€å¸§åŒ…å«16384ä¸ªæ•°æ®æ—¶ï¼Œå³æŒç»­0.372sï¼›é¢‘ç‡ç²¾åº¦ä¸º2.69Hz
+    % æ­¤æ–‡ä»¶è¿›è¡Œçš„æ˜¯å•éŸ³ç¬¦è¯†åˆ«ï¼Œå–å¾—èŒƒå›´å†…æœ€å¼ºé¢‘ç‡ï¼Œå†å‘ä¸‹æŸ¥æ‰¾2~4å€æ‰¾åˆ°åŸºé¢‘
 
-% ÇëÔÚÕâÀïÉèÖÃÎÄ¼şÃû
+% è¯·åœ¨è¿™é‡Œè®¾ç½®æ–‡ä»¶å
 file = 'piano';
 
 wav_file = strcat(file,'.wav');
 output_file_name = strcat(file,'.txt');
 [SIGNAL,FREQ]=audioread(wav_file); 
 
-LEN=16384;  %¸µÀïÒ¶±ä»»È¡Ñù³¤¶È£¬¼´Ò»Ö¡°üº¬µÄÊı¾İÁ¿
-MAXF=700;   %×î¸ßÊ¶±ğÆµÂÊ
-MINF=180;   %×îµÍÊ¶±ğÆµÂÊ
-MINA=10;    %×îµÍÏì¶È
+LEN=16384;  %å‚…é‡Œå¶å˜æ¢å–æ ·é•¿åº¦ï¼Œå³ä¸€å¸§åŒ…å«çš„æ•°æ®é‡
+MAXF=700;   %æœ€é«˜è¯†åˆ«é¢‘ç‡
+MINF=180;   %æœ€ä½è¯†åˆ«é¢‘ç‡
+MINA=10;    %æœ€ä½å“åº¦
 
-FREQ_LIST=linspace(0,FREQ/2,LEN/2); %»ñµÃ0µ½FREQ/2, ¹²LEN/2¸öÊı×ÖµÄµÈ²îÊıÁĞ
+FREQ_LIST=linspace(0,FREQ/2,LEN/2); %è·å¾—0åˆ°FREQ/2, å…±LEN/2ä¸ªæ•°å­—çš„ç­‰å·®æ•°åˆ—
 
-n=int32(length(SIGNAL)/LEN); %×ÜÖ¡Êı
+n=int32(length(SIGNAL)/LEN); %æ€»å¸§æ•°
 
 notes_list = zeros(1, n);       
 freqs_list = zeros(1, n);
-maxA_list = zeros(1, n);    %¼ÇÂ¼×î´óÏì¶È
+maxA_list = zeros(1, n);    %è®°å½•æœ€å¤§å“åº¦
 
-MAX_INDEX=int32(LEN/FREQ*MAXF); %×î¸ßÊ¶±ğÆµÂÊ¶ÔÓ¦µÄ¸öÊı
-MIN_INDEX=int32(LEN/FREQ*MINF); %×îµÍÊ¶±ğÆµÂÊ¶ÔÓ¦µÄ¸öÊı
+MAX_INDEX=int32(LEN/FREQ*MAXF); %æœ€é«˜è¯†åˆ«é¢‘ç‡å¯¹åº”çš„ä¸ªæ•°
+MIN_INDEX=int32(LEN/FREQ*MINF); %æœ€ä½è¯†åˆ«é¢‘ç‡å¯¹åº”çš„ä¸ªæ•°
 
 key=['G3 ';'G3#';'A3 ';'A3#';'B3 '];
 key=[key;'C4 ';'C4#';'D4 ';'D4#';'E4 ';'F4 ';'F4#';'G4 ';'G4#';'A4 ';'A4#';'B4 '];
 key=[key;'C5 ';'C5#';'D5 ';'D5#';'E5 ';'F5 ';'F5#';'G5 ';'G5#';'A5 ';'A5#';'B5 '];
 key=[key;'C6 ';'C6#';'D6 ';'D6#';'E6 ';'F6 ';'F6#';'G6 ';'G6#';'A6 ';'A6#';'B6 '];
 
-%·Ö¶Î½øĞĞ¸µÀïÒ¶·ÖÎö
+%åˆ†æ®µè¿›è¡Œå‚…é‡Œå¶åˆ†æ
 for i = 1:n, 
-    lX = fft( SIGNAL( (i-1)*LEN+1 : i*LEN ) );  %½ØÈ¡³¤¶ÈÎªlµÄÒ»¶ÎÊı¾İµÄ¿ìËÙ¸µÀïÒ¶±ä»»    
-    lX_cut = lX(1:MAX_INDEX);                   %¸ßÆµ½ØÖ¹
+    lX = fft( SIGNAL( (i-1)*LEN+1 : i*LEN ) );  %æˆªå–é•¿åº¦ä¸ºlçš„ä¸€æ®µæ•°æ®çš„å¿«é€Ÿå‚…é‡Œå¶å˜æ¢    
+    lX_cut = lX(1:MAX_INDEX);                   %é«˜é¢‘æˆªæ­¢
     
-    lA = sqrt(lX_cut.*conj(lX_cut));      %È¡Ä£
+    lA = sqrt(lX_cut.*conj(lX_cut));      %å–æ¨¡
     if lA > 0
         lA = 20*log10(lA);        %dB
     end
@@ -57,7 +57,7 @@ for i = 1:n,
     end
     
     best_index = max_index;
-    for mult=2:4,                  %ÔÙÏòÏÂ²éÕÒ2~4±¶ÕÒµ½»ùÆµ
+    for mult=2:4,                  %å†å‘ä¸‹æŸ¥æ‰¾2~4å€æ‰¾åˆ°åŸºé¢‘
         test_index = int32(max_index/mult);
         if (test_index>MIN_INDEX)
             if (lA(test_index) > maxA_list(i)*0.9) 
@@ -67,22 +67,22 @@ for i = 1:n,
             break;            
         end
     end
-    freqs_list(i) = FREQ_LIST( best_index );    %×îÓÅÏì¶È¶ÔÓ¦µÄÆµÂÊ
-    notes_list(i) = log(freqs_list(i)/220) / log(2) * 12 + 3; %¼ÆËãÒô¸ß
+    freqs_list(i) = FREQ_LIST( best_index );    %æœ€ä¼˜å“åº¦å¯¹åº”çš„é¢‘ç‡
+    notes_list(i) = log(freqs_list(i)/220) / log(2) * 12 + 3; %è®¡ç®—éŸ³é«˜
     
     if maxA_list(i)<MINA || notes_list(i)<-12
         notes_list(i)=NaN;
     end
 end
 
-% È¥³ıÏì¶ÈÌ«µÍµÄµã
+% å»é™¤å“åº¦å¤ªä½çš„ç‚¹
 for i = 1:n,
     if maxA_list(i)<MINA || notes_list(i)<-12
         notes_list(i)=NaN;
     end
 end
 
-% Êä³öµ½ÎÄ¼ş
+% è¾“å‡ºåˆ°æ–‡ä»¶
 output_file = fopen(output_file_name,'w');
 for i=1:n
     if notes_list(i)>0
@@ -93,10 +93,10 @@ for i=1:n
 end
 fclose(output_file);
 
-K=[0,0,0,0,0,0,0,0,0,0,0,0];  %¸¨Öú¶¨µ÷1
+K=[0,0,0,0,0,0,0,0,0,0,0,0];  %è¾…åŠ©å®šè°ƒ1
 
-%Êä³öÔ­ÀÖÆ×
-fprintf('¸ÖÇÙÒô£º\n');
+%è¾“å‡ºåŸä¹è°±
+fprintf('é’¢ç´éŸ³ï¼š\n');
 for i=1:n,
     %try
         if notes_list(i)==notes_list(i) % not NaN
@@ -120,7 +120,7 @@ end
 
 h7=[0,2,4,5,7,9,11];
 w7=[3,2,3,1,3,3,1];
-maxSc=0;  % ÓÃÓÚÍ³¼Æ¶¨µ÷
+maxSc=0;  % ç”¨äºç»Ÿè®¡å®šè°ƒ
 bestMc=6;
 for mc=6:17,
     sc=0;
@@ -133,8 +133,8 @@ for mc=6:17,
     end
 end
 
-%Êä³öĞŞ¶©ÀÖÆ×
-fprintf('\n\n¼òÆ×£º\n1=');
+%è¾“å‡ºä¿®è®¢ä¹è°±
+fprintf('\n\nç®€è°±ï¼š\n1=');
 for j=1:3
     fprintf('%c',key(bestMc,j));
 end
@@ -183,7 +183,7 @@ for i=1:n,
     end
 end
 
-fprintf('\nÒôÆµ·ÖÎöÒÑÍê³É¡£\n\n');
+fprintf('\néŸ³é¢‘åˆ†æå·²å®Œæˆã€‚\n\n');
 
 %subplot(2,2,1)
 %plot(notes_list)
