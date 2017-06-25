@@ -42,5 +42,5 @@ def spv_cnn_vf(nDim = 16000, nClass = 2):
 	return model
 
 if __name__ == "__main__":
-	model = spv_cnn()
+	model = spv_cnn_vf()
 	model.summary()

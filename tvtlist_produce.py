@@ -6,10 +6,10 @@ import os
 from random import randint
 
 cwd = os.getcwd() # current working directory
-dpath = cwd + '/data/prcsdv2.ignore/dats/' # data path
-tname = cwd + '/data/prcsdv2.ignore/train_list.txt' # train text path
-vname = cwd + '/data/prcsdv2.ignore/val_list.txt' # validation text path
-tsname = cwd + '/data/prcsdv2.ignore/test_list.txt' # test text path
+dpath = cwd + '/data/prcsdv3.ignore/dats/' # data path
+tname = cwd + '/data/prcsdv3.ignore/train_list.txt' # train text path
+vname = cwd + '/data/prcsdv3.ignore/val_list.txt' # validation text path
+tsname = cwd + '/data/prcsdv3.ignore/test_list.txt' # test text path
 tstr1 = 'lcd_chinese_pre'
 tstr2 = 'qys_english'
 tstr3 = 'ty_german'

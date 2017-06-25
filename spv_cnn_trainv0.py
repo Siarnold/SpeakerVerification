@@ -17,9 +17,9 @@ nEpochs = 500
 
 # the paths
 cwd = os.getcwd() # current working directory
-tpath = cwd + '/data/prcsd.ignore/train_list.txt' # train text path
-vpath = tpath # temporarily set the same
-dpath = cwd + '/data/prcsd.ignore/dats/' # data path
+tpath = cwd + '/data/prcsdv3.ignore/train_list.txt' # train text path
+vpath = cwd + '/data/prcsdv3.ignore/val_list.txt'
+dpath = cwd + '/data/prcsdv3.ignore/dats/' # data path
 mpath = cwd + '/modelv0.ignore/' # model path
 
 # count the number of samples
@@ -32,7 +32,7 @@ f.close()
 
 def get_session(gpu_fraction=0.9):
     num_threads = os.environ.get('OMP_NUM_THREADS')
-    os.environ["CUDA_VISIBLE_DEVICES"] = "2" 
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0" 
     gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=gpu_fraction)
     if num_threads:
         return tf.Session(config=tf.ConfigProto(
@@ -85,7 +85,7 @@ if __name__ == '__main__':
 
 	# checkpoint
 	mname = mpath + 'spv_v0.{epoch:03d}-{val_loss:.2f}.hdf5'
-	cp = ModelCheckpoint(mname, save_weights_only=True, period=25)
+	cp = ModelCheckpoint(mname, save_weights_only=True, period=10)
 	# csv logger
 	cl = CSVLogger(mpath + 'spv_v0_training.log')
 	model.fit_generator(generate_fit(tpath, batchSize, nClasses), 

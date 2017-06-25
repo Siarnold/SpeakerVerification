@@ -9,8 +9,8 @@ import numpy as np
 
 fpath = './data/raw/' # file path
 # use .ignore to avoid uploading
-pfpath = './data/prcsdv2.ignore/' # processed file path
-samRate = 4000 # sample rate
+pfpath = './data/prcsdv3.ignore/' # processed file path
+samRate = 8000 # sample rate
 samTime = 4 # sample time
 
 pfpath1 = pfpath + 'wavs/'
@@ -38,7 +38,7 @@ if not os.path.isdir(pfpath):
 		wdata = np.fromstring(sdata, dtype = np.uint16)
 		# 0 - 65535 effectively convert
 		# print(wdata.mean()) # mean around 33000
-		nsplits = nframes // nSamFrame # number of valid splits (with 16000 frames), whether the remaider is 0 or else
+		nsplits = nframes // nSamFrame # number of valid splits (with 32000 frames), whether the remaider is 0 or else
 		splits = np.split(wdata, [nSamFrame * x for x in range(1, nsplits + 1)])
 		for x in range(nsplits):
 			split = splits[x]
@@ -46,6 +46,7 @@ if not os.path.isdir(pfpath):
 			# split = np.absolute(split)
 			# print(split.max(),split.min(), split.mean())
 			# if not //, max = 5e8 min = 1e-4
+			split = split[0:nSamFrame/2] # since the amplitudes are evenly symmetric
 			split = (np.absolute(split) // 10000).astype(np.uint16)
 			# print(split.max(),split.min())
 			split.tofile(pfpath2 + wname[0:-4] + '_{:0>4d}.dat'.format(x))
